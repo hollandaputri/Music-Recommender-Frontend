@@ -12,7 +12,7 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
     e.preventDefault();
     setError(null);
     try {
-      await axios.post("http://127.0.0.1:5000/login", form);
+      await axios.post(`${process.env.REACT_APP_API_URL}/login`, form);
       onLogin(form.username);
     } catch (err) {
       setError(err.response?.data?.error || "Login gagal");
