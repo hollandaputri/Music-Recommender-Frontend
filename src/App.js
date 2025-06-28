@@ -54,7 +54,7 @@ function App() {
 
   useEffect(() => {
     if (!user) return;
-    axios.get("http://127.0.0.1:5000/lagu")
+    axios.get(`${process.env.REACT_APP_API_URL}/lagu`)
       .then((res) => {
         setSongOptions(res.data);
         const uniqueArtists = [...new Set(res.data.map((song) => song.artist))];
@@ -62,7 +62,7 @@ function App() {
       })
       .catch((err) => console.error("Gagal mengambil lagu:", err));
 
-    axios.get(`http://127.0.0.1:5000/get_user_ratings/${user}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/get_user_ratings/${user}`)
       .then((res) => setUserRatings(res.data))
       .catch(() => setUserRatings({}));
   }, [user]);
@@ -92,7 +92,7 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://127.0.0.1:5000/recommend", {
+      axios.post(`${process.env.REACT_APP_API_URL}/recommend`, {
         ...formData,
         top_n: parseInt(formData.top_n),
       });
@@ -215,7 +215,7 @@ function App() {
               value={userRatings[songKey] || 0}
               onChange={(_, newValue) => {
                 if (newValue) {
-                  axios.post("http://127.0.0.1:5000/rate", {
+                  axios.post(`${process.env.REACT_APP_API_URL}/rate`, {
                     user: user,
                     song: songKey,
                     rating: newValue
