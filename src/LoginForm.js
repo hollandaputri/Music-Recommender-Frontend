@@ -18,7 +18,7 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
     setError(null);
     setSuccess(null);
     try {
-      await axios.post("http://127.0.0.1:5000/login", form);
+      await axios.post(`${process.env.REACT_APP_API_URL}/login`, form);
       setSuccess("Login berhasil!");
       onLogin(form.username);
     } catch (err) {
