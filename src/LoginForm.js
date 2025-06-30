@@ -8,16 +8,19 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setError(null);
-    try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/login`, form);
-      onLogin(form.username);
-    } catch (err) {
-      setError(err.response?.data?.error || "Login gagal");
+  const handleLogin = async () => {
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
+      username,
+      password,
+    });
+    if (res.status === 200) {
+      onLogin(username);
     }
-  };
+  } catch (err) {
+    setError(err.response?.data?.error || "Login gagal");
+  }
+};
 
   return (
     <Box
