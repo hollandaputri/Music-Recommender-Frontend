@@ -2,27 +2,25 @@ import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_URL;
-
 const LoginForm = ({ onLogin, switchToRegister }) => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError(null);
     setSuccess(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
     try {
-      await axios.post(`${API_BASE}/login`, form);
+      await axios.post("http://127.0.0.1:5000/login", form);
       setSuccess("Login berhasil!");
-      onLogin(form.username.trim());
+      onLogin(form.username);
     } catch (err) {
       setError(err.response?.data?.error || "Login gagal");
     }
@@ -50,10 +48,8 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
       <Typography variant="h4" align="center" fontWeight={700} color="#fff" mb={2}>
         MASUK
       </Typography>
-
       {error && <Alert severity="error">{error}</Alert>}
       {success && <Alert severity="success">{success}</Alert>}
-
       <TextField
         label="Username"
         name="username"
@@ -61,20 +57,22 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
         onChange={handleChange}
         fullWidth
         required
-        InputProps={{
-          sx: {
-            borderRadius: 3,
-            background: "rgba(31,38,135,0.35)",
-            color: "#fff",
-            "& input": { color: "#fff" },
-          },
+        slotProps={{
+          input: {
+            sx: {
+              borderRadius: 3,
+              background: "rgba(31,38,135,0.35)",
+              color: "#fff",
+              border: "none",
+              boxShadow: "none",
+            }
+          }
         }}
         InputLabelProps={{
           sx: { color: "#fff" },
-          shrink: true,
+          shrink: true
         }}
       />
-
       <TextField
         label="Password"
         name="password"
@@ -83,20 +81,22 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
         onChange={handleChange}
         fullWidth
         required
-        InputProps={{
-          sx: {
-            borderRadius: 3,
-            background: "rgba(31,38,135,0.35)",
-            color: "#fff",
-            "& input": { color: "#fff" },
-          },
+        slotProps={{
+          input: {
+            sx: {
+              borderRadius: 3,
+              background: "rgba(31,38,135,0.35)",
+              color: "#fff",
+              border: "none",
+              boxShadow: "none",
+            }
+          }
         }}
         InputLabelProps={{
           sx: { color: "#fff" },
-          shrink: true,
+          shrink: true
         }}
       />
-
       <Button
         type="submit"
         variant="contained"
@@ -120,7 +120,6 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
       >
         MASUK
       </Button>
-
       <Button
         onClick={switchToRegister}
         fullWidth
@@ -131,7 +130,7 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
           fontSize: 18,
           background: "none",
           boxShadow: "none",
-          "&:hover": { textDecoration: "underline", background: "none" },
+          "&:hover": { textDecoration: "underline", background: "none" }
         }}
         disableRipple
       >
