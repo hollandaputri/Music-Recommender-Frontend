@@ -2,25 +2,31 @@ import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Alert } from "@mui/material";
 import axios from "axios";
 
+const API_BASE = process.env.REACT_APP_API_URL;
+
 const LoginForm = ({ onLogin, switchToRegister }) => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError(null);
+    setSuccess(null);
+  };
 
-  const handleLogin = async () => {
-  try {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
-      username,
-      password,
-    });
-    if (res.status === 200) {
-      onLogin(username);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    try {
+      await axios.post(`${API_BASE}/login`, form);
+      setSuccess("Login berhasil!");
+      onLogin(form.username.trim());
+    } catch (err) {
+      setError(err.response?.data?.error || "Login gagal");
     }
-  } catch (err) {
-    setError(err.response?.data?.error || "Login gagal");
-  }
-};
+  };
 
   return (
     <Box
@@ -44,6 +50,10 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
       <Typography variant="h4" align="center" fontWeight={700} color="#fff" mb={2}>
         MASUK
       </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
+      {success && <Alert severity="success">{success}</Alert>}
+
       <TextField
         label="Username"
         name="username"
@@ -54,18 +64,17 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
         InputProps={{
           sx: {
             borderRadius: 3,
-            background: "rgba(31,38,135,0.35)", // warna gelap/transparan
+            background: "rgba(31,38,135,0.35)",
             color: "#fff",
-            border: "none",
-            boxShadow: "none",
-            "& input": { color: "#fff" }
-          }
+            "& input": { color: "#fff" },
+          },
         }}
         InputLabelProps={{
           sx: { color: "#fff" },
-          shrink: true
+          shrink: true,
         }}
       />
+
       <TextField
         label="Password"
         name="password"
@@ -77,19 +86,17 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
         InputProps={{
           sx: {
             borderRadius: 3,
-            background: "rgba(31,38,135,0.35)", // warna gelap/transparan
+            background: "rgba(31,38,135,0.35)",
             color: "#fff",
-            border: "none",
-            boxShadow: "none",
-            "& input": { color: "#fff" }
-          }
+            "& input": { color: "#fff" },
+          },
         }}
         InputLabelProps={{
           sx: { color: "#fff" },
-          shrink: true
+          shrink: true,
         }}
       />
-      {error && <Alert severity="error">{error}</Alert>}
+
       <Button
         type="submit"
         variant="contained"
@@ -113,6 +120,7 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
       >
         MASUK
       </Button>
+
       <Button
         onClick={switchToRegister}
         fullWidth
@@ -123,7 +131,7 @@ const LoginForm = ({ onLogin, switchToRegister }) => {
           fontSize: 18,
           background: "none",
           boxShadow: "none",
-          "&:hover": { textDecoration: "underline", background: "none" }
+          "&:hover": { textDecoration: "underline", background: "none" },
         }}
         disableRipple
       >
