@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Link } from "@mui/material";
 
-const API_BASE = process.env.REACT_APP_API_URL;
 
 const PopularSongs = () => {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${API_BASE}/popular`)
+      .get("http://localhost:5000/popular")
       .then((res) => setSongs(res.data))
       .catch((err) => console.error("Gagal memuat lagu populer", err));
   }, []);
@@ -28,7 +27,6 @@ const PopularSongs = () => {
       >
         Rekomendasi Populer
       </Typography>
-
       <Box
         sx={{
           display: "grid",
@@ -89,10 +87,6 @@ const PopularSongs = () => {
                     boxShadow: "0 4px 32px #5ad1e655",
                     border: "1.5px solid #5ad1e6",
                   },
-                }}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/fallback.jpg"; // Opsional fallback image
                 }}
               />
               <Typography
