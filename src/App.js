@@ -86,24 +86,24 @@ function App() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setResults([]);
-    setLoading(true);
+  e.preventDefault();
+  setError(null);
+  setResults([]);
+  setLoading(true);
 
-    try {
-      axios.post(`${process.env.REACT_APP_API_URL}/recommend`, {
-        ...formData,
-        top_n: parseInt(formData.top_n),
-      });
-      setResults(res.data.recommendations || res.data);
-      setShowRecommendation(true);
-    } catch (err) {
-      setError(err.response?.data?.error || "Server Error");
-    }
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/recommend`, {
+      ...formData,
+      top_n: parseInt(formData.top_n),
+    });
+    setResults(res.data.recommendations || res.data);
+    setShowRecommendation(true);
+  } catch (err) {
+    setError(err.response?.data?.error || "Server Error");
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   if (!user) {
     return showRegister
