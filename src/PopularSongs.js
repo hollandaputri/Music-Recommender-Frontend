@@ -7,8 +7,7 @@ const PopularSongs = () => {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/popular")
+    axios.get(`${process.env.REACT_APP_API_URL}/popular`)
       .then((res) => setSongs(res.data))
       .catch((err) => console.error("Gagal memuat lagu populer", err));
   }, []);
